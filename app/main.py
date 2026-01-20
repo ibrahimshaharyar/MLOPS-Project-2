@@ -3,11 +3,11 @@ from fastapi.responses import JSONResponse
 import tempfile
 from pathlib import Path
 
-from src.serving.predictor import Predictor
+import src.serving.predictor as predictor_module
+predictor = predictor_module.Predictor()
 
 app = FastAPI(title="Chicken Feces Classifier API")
 
-predictor = Predictor()
 
 @app.get("/")
 def root():
