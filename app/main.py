@@ -1,29 +1,28 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from src.serving.predictor import Predictor
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 import tempfile
-from pathlib import Path
-
-import src.serving.predictor as predictor_module
-predictor = predictor_module.Predictor()
+from pathlib import Path as P
 
 app = FastAPI(title="Chicken Feces Classifier API")
-
+predictor = Predictor()
 
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "Chicken feces classifier running"}
+    return {"status": "ok"}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # Save uploaded file temporarily
-    suffix = Path(file.filename).suffix or ".jpg"
+    suffix = P(file.filename).suffix or ".jpg"
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-        contents = await file.read()
-        tmp.write(contents)
+        tmp.write(await file.read())
         tmp_path = tmp.name
 
     try:
-        result = predictor.predict(tmp_path)
-        return JSONResponse(content=result)
+        return JSONResponse(content=predictor.predict(tmp_path))
     finally:
-        Path(tmp_path).unlink(missing_ok=True)
+        P(tmp_path).unlink(missing_ok=True)
