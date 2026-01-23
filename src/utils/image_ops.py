@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def load_and_prepare_image(image_path: str, image_size: int) -> tf.Tensor:
+def load_and_prepare_image(image_path: str, image_size: int):
     img_bytes = tf.io.read_file(image_path)
     img = tf.image.decode_image(img_bytes, channels=3, expand_animations=False)
     img = tf.image.resize(img, (image_size, image_size))

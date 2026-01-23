@@ -17,7 +17,8 @@ class Predictor:
         if not MODEL_PATH.exists():
             raise FileNotFoundError(f"Model not found: {MODEL_PATH}")
 
-        self.model = tf.keras.models.load_model(MODEL_PATH)
+        # Load model without compilation (optimizer state) to avoid cross-platform issues
+        self.model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 
     def predict(self, image_path: str):
         x = load_and_prepare_image(image_path, self.image_size)

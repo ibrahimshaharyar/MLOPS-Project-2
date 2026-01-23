@@ -1,0 +1,6 @@
+paths:
+  raw_data_dir: data/raw
+  processed_data_dir: data/processed
+  split_data_dir: data/split
+  artifacts_dir: artifacts
+  model_dir: artifacts/model
